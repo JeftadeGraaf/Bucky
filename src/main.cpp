@@ -1,54 +1,36 @@
-// Slave
+// Master
 
 #include <Arduino.h>
 #include <Motor.h>
 #include <Core.h>
 #include <Wire.h>
+#include <TSSP.h>
 #include <Serial_C.h>
-// #include <LSM9DS1.h>
 
-Motor m1 (1, 2);
-Motor m2 (22, 23);
-Motor m3 (24, 25);
 
-Lsm9ds1 gyro (300, -8.58);
+unsigned long time_ms = 0;
+#define T_MODEA 833
 
-Serial_C serial (false);
 
-void move(float degrees, int basespeed) {
-  float pi = 57.29577951; // 1: 240, 2: 120, 3: 0
-  // float speedM1 = (cos((120-degrees) * pi)*basespeed);
-  // Serial.print("motor 1: ");
-  // Serial.println(speedM1);
-  // float speedM2 = (cos((240-degrees) * pi)*basespeed);
-  // Serial.print("motor 2: ");
-  // Serial.println(speedM2);
-  // float speedM3 = (cos((0-degrees) * pi)*basespeed);
-  // Serial.print("motor 3: ");
-  // Serial.println(speedM3);
+int pin[14] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+TSSP ir_sens (pin);
 
-  float speedM1 = -(basespeed) * sin((degrees + 180) / pi);
-  float speedM2 = -(basespeed) * sin((degrees + 60) / pi);
-  float speedM3 = -(basespeed) * sin((degrees - 60) / pi);
 
-  m1.move(speedM1);
-  m2.move(speedM2);
-  m3.move(speedM3);
-}
+Serial_C serial (true);
+
+const int degree_increase = 25.7142857143;
 
 void setup() {
   Serial.begin(115200);
-  Serial.println("start");
+  ir_sens.setAllSensorPinsInput();
   serial.setup();
-  // gyro.setup();
-  // gyro.magCalibrate();
-  m1.setup();
-  m2.setup();
-  m3.setup();
 }
 
-void loop() {
-  float deg = serial.receive().toFloat();
-  //Serial.println(gyro.magCalculate());
-  move(deg, 0);
+void loop () {
+  float           pulseWidth[14]; // パルス幅を格納する変数
+
+  ir_sens.getAllSensorPulseWidth(pulseWidth, T_MODEA);
+
+  Serial.println(ir_sens.maxSensorNumber);
+  
 }

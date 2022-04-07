@@ -6,10 +6,14 @@
 #include <Wire.h>
 #include <TSSP.h>
 #include <Serial_C.h>
-#include <LSM9DS1.h>
+
 
 unsigned long time_ms = 0;
 #define T_MODEA 833
+
+
+const int pin[14] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+TSSP ir_sens (pin);
 
 int serialPrintAllPusleWidth(float *pulseWidth, sensorInfo_t *infop) {
   return infop->maxSensorNumber;
