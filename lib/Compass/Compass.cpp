@@ -20,7 +20,7 @@ void Compass::setup() {
 float Compass::compassRead() {
     sensors_event_t event;
     mag.getEvent(&event);
-    float heading = atan2(event.magnetic.y, event.magnetic.x);
+    float heading = atan2(event.magnetic.y, event.magnetic.z);
 
     return heading;
 }
@@ -44,5 +44,5 @@ float Compass::compassCalculate(double heading) {
    
   float headingDegrees = heading * 180/M_PI; 
 
-  return headingDegrees - 180 - calibration;
+  return headingDegrees-calibration;
 }
