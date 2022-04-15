@@ -31,9 +31,9 @@ void move(float degrees, int basespeed, double offset) {
   float speedM2 = -(basespeed) * sin((degrees + 60) / pi) + offset;
   float speedM3 = -(basespeed) * sin((degrees - 60) / pi) + offset;
 
-  m1.move(0 + offset);
-  m2.move(0 + offset);
-  m3.move(0 + offset);
+  m1.move(speedM1, offset);
+  m2.move(speedM2, offset);
+  m3.move(speedM3, offset);
 }
 
 void setup() {
@@ -49,5 +49,7 @@ void setup() {
 void loop() {
   float IR_deg = serial.receive().toFloat();
   double deg = compass.compassRead();
-  Serial.println(deg * 180/PI);
+  deg = compass.compassCalculate(deg);
+  Serial.println(deg);
+  move(IR_deg, 100, deg);
 }

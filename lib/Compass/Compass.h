@@ -4,8 +4,9 @@
 class Compass {
     private:
         float DECLINATION;
-        int calibration;
+        float correctDegrees(double heading);
     public:
+        float calibration;
         Compass(float DECLINATION);
         void setup();
         float compassRead();
